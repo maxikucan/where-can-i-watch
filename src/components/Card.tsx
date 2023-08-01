@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import { truncateText } from '../helpers/common';
-import '../index.css'
 
 interface CardProps {
   title?: string;
