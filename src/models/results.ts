@@ -17,7 +17,8 @@ export interface Result {
   tmdbRating: number;
   originalTitle: string;
   backdropPath: string;
-  backdropURLs: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  backdropURLs: any;
   genres: Genres[];
   originalLanguage: string;
   countries: string[];

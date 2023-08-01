@@ -22,7 +22,7 @@ export default function App() {
         e.preventDefault();
         detectIsInNetflix();
       }}>
-      <div style={{ display: 'flex', justifyContent: 'center', minWidth: '100vw', gap: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', minWidth: '100vw', gap: '1rem', marginBottom: '1rem' }}>
         <input
           id="title"
           type="text"
@@ -34,12 +34,16 @@ export default function App() {
         <button>Search</button>
       </div>
 
-      <h3>{checkIsInNetflix(movieResults)}</h3>
-
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center', alignItems: 'center', margin: '0 auto' }}>
         {!!checkIsInNetflix(movieResults) &&
-          movieResults?.result.map(result => (
-            <Card title={result.title} desciption={result.overview} streamingSites={Object.keys(result.streamingInfo.ar || { noInfo: 'noInfo' })} />
+          movieResults?.result.map((result, i) => (
+            <Card
+              key={`card-index-${i}`}
+              title={result.title}
+              desciption={result.overview}
+              img={result.backdropURLs[780] || undefined}
+              streamingSites={Object.keys(result.streamingInfo.ar || { noInfo: 'noInfo' })}
+            />
           ))}
       </div>
     </form>
