@@ -6,14 +6,14 @@ export function checkIsInNetflix(results: ResultResponse | null): string | boole
   }
 
   if (!results?.result[0].streamingInfo.ar) {
-    return 'No se hay resultados de películas con ese nombre...';
+    return 'No results...';
   }
 
   if (!Object.keys(results?.result[0].streamingInfo.ar as StreamInfoKey[]).some(item => item === 'netflix')) {
-    return `NO Está en netfix, pero está en: ${Object.keys(results?.result[0].streamingInfo.ar as StreamInfoKey[])
+    return `It is NOT in Netflix, but it is in: ${Object.keys(results?.result[0].streamingInfo.ar as StreamInfoKey[])
       .map(item => item)
       .join(' | ')}`;
   }
 
-  return 'Está en netflix';
+  return 'Yes, it is in Netflix!';
 }

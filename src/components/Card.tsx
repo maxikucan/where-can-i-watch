@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 interface CardProps {
   title?: string;
   desciption?: string;
@@ -18,8 +20,18 @@ export default function Card(props: CardProps) {
         height: '400px'
       }}>
       <h2>{props.title}</h2>
+
       <p>{props.desciption}</p>
-      <h4>{props.streamingSites?.map(item => `${item} | `)} </h4>
+
+      <div>
+        {!props.streamingSites?.includes("noInfo") && props.streamingSites?.map((item, i) => (
+          <Fragment key={`card-index-${i}`}>
+            <span style={{ fontWeight: 'bold' }}>{item}</span>
+
+            {props.streamingSites && i < props.streamingSites?.length - 1 && <span style={{margin: '0 5px'}}>|</span>}
+          </Fragment>
+        ))}
+      </div>
     </div>
   );
 }
