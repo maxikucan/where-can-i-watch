@@ -1,71 +1,47 @@
-import { useState } from "react";
-import { ResultResponse, StreamInfoKey } from "./models/results";
-import "./App.css";
+import { useState } from 'react';
+import { ResultResponse } from './models/results';
+import { searchTitle } from './service/searchTitle';
+import { checkIsInNetflix } from './helpers/checkIsInNetflix';
+import Card from './components/Card';
+import './index.css';
 
-function App() {
+export default function App() {
   const [movieResults, setMovieResults] = useState<ResultResponse | null>(null);
-  const [title, setTitle] = useState<string>("");
-
-  // DATA FETCHING
-  async function searchTitle(title: string) {
-    const url = `https://streaming-availability.p.rapidapi.com/v2/search/title?title=${title}&country=ar&show_type=movie&output_language=en`;
-    const options = {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": `${import.meta.env.VITE_API_KEY}`,
-        "X-RapidAPI-Host": "streaming-availability.p.rapidapi.com",
-      },
-    };
-
-    try {
-      const response = await fetch(url, options);
-      const result: ResultResponse = await response.json();
-      setMovieResults(result);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [title, setTitle] = useState<string>('');
 
   function detectIsInNetflix() {
-    searchTitle(title).then(() => {
-      if (
-        Object.keys(
-          movieResults?.result[0].streamingInfo.ar as StreamInfoKey[]
-        ).some((item) => item === "netflix")
-      ) {
-        console.log("Está en netfix");
-      } else {
-        console.log(
-          "NO Está en netfix, pero está en:",
-          Object.keys(
-            movieResults?.result[0].streamingInfo.ar as StreamInfoKey[]
-          )
-            .map((item) => item)
-            .join(" | ")
-        );
-      }
-    });
+    searchTitle(title)
+      .then(data => setMovieResults(data))
+      .catch(e => console.error(e));
   }
 
   return (
-    <>
-      <form
-        id="search-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          detectIsInNetflix();
-        }}>
-        <label htmlFor="title">Search for a movie or TV show...</label>
+    <form
+      id="search-form"
+      onSubmit={e => {
+        e.preventDefault();
+        detectIsInNetflix();
+      }}>
+      <div style={{ display: 'flex', justifyContent: 'center', minWidth: '100vw', gap: '1rem' }}>
         <input
           id="title"
           type="text"
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={e => setTitle(e.target.value)}
           value={title}
+          placeholder="Search for a movie..."
+          style={{ width: '50%', borderRadius: '8px', paddingLeft: '12px' }}
         />
         <button>Search</button>
-      </form>
-    </>
+      </div>
+
+      <h3>{checkIsInNetflix(movieResults)}</h3>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center', alignItems: 'center', margin: '0 auto' }}>
+        {!!checkIsInNetflix(movieResults) &&
+          movieResults?.result.map(result => (
+            <Card title={result.title} desciption={result.overview} streamingSites={Object.keys(result.streamingInfo.ar || { noInfo: 'noInfo' })} />
+          ))}
+      </div>
+    </form>
   );
 }
-
-export default App;

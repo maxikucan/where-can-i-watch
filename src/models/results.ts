@@ -1,14 +1,12 @@
 export interface ResultResponse {
-    result: Result[];
+  result: Result[];
 }
 
 export interface Result {
   type: string;
   title: string;
   overview: string;
-  streamingInfo: {
-    ar: StreamInfoKey[];
-  };
+  streamingInfo: { ar: StreamInfoKey[] };
   cast: string[];
   year: number;
   advisedMinimumAudienceAge: number;
@@ -20,16 +18,7 @@ export interface Result {
   originalTitle: string;
   backdropPath: string;
   backdropURLs: unknown;
-  genres: [
-    {
-      id: 28;
-      name: "Action";
-    },
-    {
-      id: 80;
-      name: "Crime";
-    }
-  ];
+  genres: Genres[];
   originalLanguage: string;
   countries: string[];
   directors: string[];
@@ -44,7 +33,6 @@ export interface Result {
 export interface StreamInfoKey {
   key: Streaminginfo[];
 }
-
 interface Streaminginfo {
   type: string;
   quality: string;
@@ -57,4 +45,9 @@ interface Streaminginfo {
 interface Audios {
   language: string;
   region: string;
+}
+
+interface Genres {
+  id: number;
+  name: string;
 }
