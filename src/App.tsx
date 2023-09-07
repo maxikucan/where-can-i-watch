@@ -3,8 +3,8 @@ import { ResultResponse } from './models/results';
 import { searchTitle } from './service/searchTitle';
 import { checkIsInNetflix } from './helpers/checkIsInNetflix';
 import Card from './components/Card';
-import './index.css';
 import Spinner from './components/Spinner';
+import './index.css';
 
 export default function App() {
   const [movieResults, setMovieResults] = useState<ResultResponse | null>(null);
@@ -28,15 +28,16 @@ export default function App() {
       onSubmit={e => {
         e.preventDefault();
         detectIsInNetflix();
-      }}>
+      }}
+      style={{ padding: '2rem 0' }}>
       <div style={{ display: 'flex', justifyContent: 'center', minWidth: '100vw', gap: '1rem', marginBottom: '1rem' }}>
         <input
           id="title"
           type="text"
           onChange={e => setTitle(e.target.value)}
           value={title}
-          placeholder="Search for a movie..."
-          style={{ width: '50%', borderRadius: '8px', paddingLeft: '12px' }}
+          placeholder="Search for a movie or TV show..."
+          style={{ width: '50%', borderRadius: '8px', paddingLeft: '12px', outline: 'none' }}
         />
         <button>Search</button>
       </div>
@@ -46,15 +47,18 @@ export default function App() {
 
         {!!checkIsInNetflix(movieResults) &&
           !isLoading &&
-          movieResults?.result.map((result, i) => (
-            <Card
-              key={`card-index-${i}`}
-              title={result.title}
-              desciption={result.overview}
-              img={result.backdropURLs[780] || undefined}
-              streamingSites={Object.keys(result.streamingInfo.ar || { unknown: 'Unknown' })}
-            />
-          ))}
+          movieResults?.result.map(
+            (result, i) =>
+              result.streamingInfo.ar && (
+                <Card
+                  key={`card-index-${i}`}
+                  title={result.title}
+                  desciption={result.overview}
+                  img={result.backdropURLs[780] || undefined}
+                  streamingSites={Object.keys(result.streamingInfo.ar || { unknown: 'Unknown' })}
+                />
+              )
+          )}
       </div>
     </form>
   );
