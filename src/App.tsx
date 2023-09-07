@@ -4,15 +4,22 @@ import { searchTitle } from './service/searchTitle';
 import { checkIsInNetflix } from './helpers/checkIsInNetflix';
 import Card from './components/Card';
 import './index.css';
+import Spinner from './components/Spinner';
 
 export default function App() {
   const [movieResults, setMovieResults] = useState<ResultResponse | null>(null);
-  const [title, setTitle] = useState<string>('');
+  const [title, setTitle] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   function detectIsInNetflix() {
+    if (!title || isLoading) return;
+
+    setIsLoading(true);
+
     searchTitle(title)
       .then(data => setMovieResults(data))
-      .catch(e => console.error(e));
+      .catch(e => console.error(e))
+      .finally(() => setIsLoading(false));
   }
 
   return (
@@ -35,14 +42,17 @@ export default function App() {
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center', alignItems: 'center', margin: '0 auto' }}>
+        {isLoading && <Spinner />}
+
         {!!checkIsInNetflix(movieResults) &&
+          !isLoading &&
           movieResults?.result.map((result, i) => (
             <Card
               key={`card-index-${i}`}
               title={result.title}
               desciption={result.overview}
               img={result.backdropURLs[780] || undefined}
-              streamingSites={Object.keys(result.streamingInfo.ar || { noInfo: 'noInfo' })}
+              streamingSites={Object.keys(result.streamingInfo.ar || { unknown: 'Unknown' })}
             />
           ))}
       </div>
