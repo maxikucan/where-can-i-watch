@@ -8,6 +8,10 @@ This is your ultimate destination for discovering where your favorite movies are
 >
 > npm run dev
 
+## Production deployment
+
+> https://where-can-i-watch-im96ifuu4-maxikucan.vercel.app/
+
 ## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
