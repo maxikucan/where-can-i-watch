@@ -2,6 +2,12 @@
 
 This is your ultimate destination for discovering where your favorite movies are available across various streaming platforms like Netflix, Prime Video, and more. Never miss out on your favorite films again!
 
+## Clone the project, install dependencies and run the project
+
+> npm install
+>
+> npm run dev
+
 ## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
